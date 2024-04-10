@@ -43,15 +43,16 @@ export default function Registrer() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({Brukernavn: brukernavn, Passord: passord})
     };
-    fetch('http://127.0.0.1:5000/lukas', requestOptions)
-      .then(response => response.json())
-      .then(json => {
-        console.log(json["message"])
-      })
-      setBrukernavn("")
-      setPassord("")
-      setLoggetInn(true)
-      }
+      fetch('http://127.0.0.1:5000/lukas', requestOptions)
+        .then(response => response.json())
+        .then(json => {
+          console.log(json["message"])
+        })
+        setBrukernavn("")
+        setPassord("")
+        setLoggetInn(true)
+        }
+    
 
 }
   return (

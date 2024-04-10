@@ -11,7 +11,7 @@ export default function Registrer() {
   const [Passord, setPassord] = useState<string>("");
   const [feilpassord, setFeilPassord] = useState<boolean>(false);
   let navn = ""
-
+  
   const jwt = require("jsonwebtoken")
 
   

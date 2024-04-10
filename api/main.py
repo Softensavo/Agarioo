@@ -18,8 +18,6 @@ app.config["JWT_SECRET_KEY"] = "super-secret"
 app.config["JWT_ALGORITHM"] = "HS256"
 jwt = JWTManager(app)
 
-super_hemmelig_nækkel = "chillmans"
-password = "password"
 
 # Connect to MariaDB Platforms
 try:
@@ -28,36 +26,33 @@ try:
         password="Lukasnoob",
         host="localhost",
         port=3306,
-        database="Brukernettside"
+        database="brukernettside"
 
     )
-
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")
     sys.exit(1)
-
-# Get Cursor
 cur = conn.cursor()
 
-
 @app.route('/highscore', methods=['GET'])
-def henthighscore():
+def highscore():
     try:
-        username = request.args.get("username")
-        print("username", username)
+        bruker = request.args.get("bruker")
+        print("bruker",bruker)
         cur.execute(
-            "select Highscore from brukere where brukernavn=(?);",(username,)
+            "SELECT Highscore FROM brukere WHERE Brukernavn=(?);",(bruker,)
         )
-        brukerdata = cur.fetchone()
-        if brukerdata:
-            highscore = brukerdata[0]
-            return {"highscore": highscore, "melding":"no"}
+        data = cur.fetchone()
+        if data:
+            highscore = data[0]
+            return {"highscore":highscore, "melding":"highscore funnet"}
         else:
-            return {"melding": "fant ikke brukeren"}
-
+            print("data",data)
+            return {"melding": "fant ikke highscore"}
     except mariadb.Error as e:
-        print("error getting highscore",e)
-        return {"melding":"shit 404"}
+        print("feil under henting av highscore",e)
+        return {"melding": "Noe gikk galt"}
+
 
 
 @app.route('/add_user', methods=['PUT','GET'])
@@ -105,7 +100,7 @@ def login():
 
     return "well fuck 404"
 @app.route('/protected_route', methods=['GET'])
-@jwt_required()  # This decorator ensures that only requests with valid access tokens can access this route
+@jwt_required() 
 def protected():
     print("BAOMBAAOCMAVBOASODJAKCMO")
     current_user = get_jwt_identity()
@@ -159,3 +154,4 @@ api.add_resource(Helloworld, "/" + "<string:name>")
 if __name__ == "__main__":
     app.run(debug=True)
     conn.close()
+

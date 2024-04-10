@@ -1,75 +1,127 @@
 "use client"
-import { error } from "console";
-import { useState,useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { json } from "stream/consumers";
+import { error } from "console";
 
-export default function agario(){
-    const [highscore,setHighscore] = useState<string>("")
-    const [username,setUsername] = useState<string>("")
-    
-    async function getuser() {
-        const token = localStorage.getItem('token');
-        console.log(token)
-        if (token) {
-            return fetch(`http://127.0.0.1:5000/protected_route`, {
-                    method: "GET",
-                    headers: { 'Authorization': `Bearer ${token}` }
-                })
-                .then(response => response.json())
-                .then(json => {
-                    console.log("helo", json)
-                    console.log("bruker", json["bruker"])
-                    return json["bruker"]
-                })
-                .catch(error => {
-                    console.log("error", error)
-                    return "feil"
-                })
+function AgarioSpill() {
+    const canvasRef = useRef(null);
+    const [position, setPosition] = useState({ x: 100, y: 100 });
+
+    useEffect(function canvasstartup(){
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+
+        function drawCircle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "red";
+            ctx.beginPath();
+            ctx.arc(position.x, position.y, 10, 0, 2 * Math.PI);
+            ctx.fill();
         }
-    }
-    
-    async function gethighscore() {
-        try {
-            const bruker = await getuser(); // Wait for the user to be retrieved
-            console.log("shoom", bruker);
-            const req = {
-                method: "GET",
-                headers: { "content-type": "application/string" }
-            };
-            const response = await fetch(`http://127.0.0.1:5000/highscore?username=${bruker}`, req);
-            const data = await response.json();
-            console.log(data); // Log the fetched data
-            if (data && data.melding === "no") {
-                setHighscore(data.highscore); // Update the high score state
-            } else {
-                console.log("User not found or other error occurred:", data.melding);
+        function handleKey(event){
+            switch (event.key){
+                case "ArrowUp":
+                    setPosition(prevPosition => {
+                        return {
+                          x: prevPosition.x,
+                          y: prevPosition.y - 5 
+                        };
+                      });
+                    break;
+                case "ArrowDown":
+                    setPosition(prevPosition => {
+                        return {
+                          x: prevPosition.x, 
+                          y: prevPosition.y + 5
+                        };
+                      });
+                    break;
+                case "ArrowLeft":
+                    setPosition(prevPosition => {
+                        return {
+                          x: prevPosition.x -5,
+                          y: prevPosition.y  
+                        };
+                      });
+                    break;
+                case "ArrowRight":
+                    setPosition(prevPosition => {
+                        return {
+                          x: prevPosition.x + 5,
+                          y: prevPosition.y
+                        };
+                      });
+                    break;
+                default:
+                    break;
             }
-        } catch (error) {
-            console.error('Error fetching highscore:', error);
         }
+        drawCircle();
+        window.addEventListener("keydown",handleKey);
+
+        return function cleanup(){
+            window.removeEventListener("keydown",handleKey)
+        }
+
+    }, [position]);
+
+    return <canvas ref={canvasRef} className="w-4/6 h-4/6 border-black border-lg border-4"></canvas>;
+}
+
+export default function Agario() {
+    const [highscore,SetHighscore] = useState<string>("")
+
+    useEffect(()=>{
+        henthighscore()
+    },[])
+
+    async function henthighscore(){
+        const bruker = await finnbruker()
+        console.log(bruker)
+        const req = {
+            method:'GET',
+            headers:{'Content-Type': 'application/json'}
+
+        }
+        fetch(`http://127.0.0.1:5000/highscore?bruker=${bruker}`)
+        .then(response => response.json())
+        .then(json =>{
+            console.log("helo",json)
+            SetHighscore(json["highscore"])
+        })
+
+    }
+    function finnbruker() {
+        const token = localStorage.getItem("token");
+        console.log(token);
+    
+        return fetch("http://127.0.0.1:5000/protected_route", {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(json => {
+            console.log(json);
+            return json["bruker"];
+        });
     }
     
-    useEffect(()=>{
-        gethighscore()
-
-    },[]);
 
 
 
-    
-    
-
-
-    return(
+    return (
         <div className="flex h-screen w-screen bg-white items-center justify-center">
-            <canvas className="w-4/6 h-4/6 border-black border-lg border-4">
-            </canvas>
-            <div className="h-2/6 w/6 p-4">
-                <p>Highscore:</p>
-                <p>{highscore}</p>
+            <AgarioSpill />
+            <div className="flex flex-col items-center">
+            <div className=" p-4">
+                <p className="text-xl">Highscore:</p>
+                <p className="text-xl">{highscore}</p>
             </div>
- 
+            <Link href="/Spilltutorial" className='bg-blue-500 w-fit rounded-lg p-2 text-2xl text-white mb-5 hover:bg-blue-700'>Tutorial</Link>
+            </div>
         </div>
-
-    )
+    );
 }
