@@ -32,14 +32,14 @@ write this in you terminal to install them
   pip install flask flask_restful flask_jwt_extended flask_cors flask_bcrypt typing mariadb sys
 ```
 Front end:
-- React
+- **React:**
   To install react you can follow this guide [here](https://react.dev/learn/installation)
-- Typescript
+- **Typescript:**
   To install typescript write the following to the terminal:
   ```bash
   run npm install -g typescript
   ```
-- Tailwind
+- **Tailwind:**
   To install tailwind write the following to the terminal:
   ```bash
   npm install -D tailwindcss
