@@ -29,7 +29,45 @@ Python libraries:
 - mariadb
 - sys
 
-write this in you terminal to install them
+Write this in your terminal to install them:
+
+For windows
 ```bash
   pip install flask flask_restful flask_jwt_extended flask_cors flask_bcrypt typing mariadb sys
+```
+For mac/linux: 
+```bash
+  pip3 install flask flask_restful flask_jwt_extended flask_cors flask_bcrypt typing mariadb sys
+```
+
+Front end:
+- **React:**
+  To install react you can follow this guide [here](https://react.dev/learn/installation)
+- **Typescript:**
+  To install typescript write the following in the terminal:
+  ```bash
+  run npm install -g typescript
+  ```
+- **Tailwind:**
+  To install tailwind write the following in the terminal:
+  ```bash
+  npm install -D tailwindcss
+  npx tailwindcss init
+  ```
+
+After that you will have everything you need to run the app.
+To run the app you would need to run both the api and react page at the same time. 
+to run the flask api go into the terminal where you python code is and write:
+
+For windows:
+```bash
+python main.py
+```
+For Mac/linux:
+```bash
+python3 main.py
+```
+then open another terminal and go into the place where you have the react code and write:
+```bash
+npm run dev
 ```
