@@ -72,7 +72,7 @@ then open another terminal and go into the place where you have the react code a
 npm run dev
 ```
 
-##Contact Me
+## Contact Me
 
 Email: alvar.gjerde@gmail.com
 
