@@ -57,7 +57,7 @@ Front end:
 
 After that you will have everything you need to run the app.
 To run the app you would need to run both the api and react page at the same time. 
-to run the flask api go into the terminal where you python code is and write:
+To run the flask api go into the terminal where you python code is and write:
 
 For windows:
 ```bash
