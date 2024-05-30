@@ -71,3 +71,9 @@ then open another terminal and go into the place where you have the react code a
 ```bash
 npm run dev
 ```
+
+##Contact Me
+
+Email: alvar.gjerde@gmail.com
+
+
